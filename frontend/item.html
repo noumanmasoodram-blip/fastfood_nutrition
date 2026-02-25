@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FastFoodInsight – Item Details</title>
+
+  <!-- Styles -->
+   
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="item.css">
+ <link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon.png" sizes="48x48">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <link rel="canonical" href="https://www.fastfoodinsight.com/item.html" />
+
+  <!-- Google Tag -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXSSM718Z2"></script>
+  <!-- Dynamic Meta Update -->
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+  const country = params.get("country");
+  const branch = params.get("branch");
+
+  if (!id || !country || !branch) return;
+
+  try {
+    const response = await fetch(
+      `/api/item?id=${id}`
+    );
+    const data = await response.json();
+
+    const itemName = data.name || "Food Item";
+
+    // -----------------------------
+    // UPDATE HTML TITLE + META TAGS
+    // -----------------------------
+    const title = `${branch} (${country}) – ${itemName} | FastFoodInsight`;
+    const description = `Nutrition facts for ${itemName} from ${branch} in ${country}: ${data.calories} kcal, ${data.protein}g protein, ${data.fat}g fat, ${data.carbohydrates}g carbs.`;
+
+    // Page title
+    document.title = title;
+
+    // Description meta
+    let descMeta = document.querySelector('meta[name="description"]');
+    if (!descMeta) {
+      descMeta = document.createElement("meta");
+      descMeta.name = "description";
+      document.head.appendChild(descMeta);
+    }
+    descMeta.content = description;
+
+    // Canonical link
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.rel = "canonical";
+      document.head.appendChild(canonical);
+    }
+    canonical.href = `https://www.fastfoodinsight.com/item.html?country=${country}&branch=${branch}&id=${id}`;
+
+    // -----------------------------
+    // CREATE JSON-LD STRUCTURED DATA
+    // -----------------------------
+    const ld = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "MenuItem",
+          "name": itemName,
+          "brand": branch,
+          "areaServed": country,
+          "nutrition": {
+            "@type": "NutritionInformation",
+            "calories": `${data.calories} kcal`,
+            "proteinContent": `${data.protein} g`,
+            "fatContent": `${data.fat} g`,
+            "carbohydrateContent": `${data.carbohydrates} g`,
+            "servingSize": data.serving_size || ""
+          }
+        },
+        {
+          "@type": "Dataset",
+          "name": `${itemName} Nutrition Dataset (${branch} - ${country})`,
+          "description": `Complete nutrition dataset for ${itemName} from ${branch} in ${country}. Includes calories, protein, fat, carbohydrates and more.`,
+          "license": "https://creativecommons.org/licenses/by/4.0/",
+          "creator": {
+            "@type": "Organization",
+            "name": "FastFoodInsight",
+            "url": "https://www.fastfoodinsight.com"
+          },
+          "variableMeasured": [
+            { "@type": "PropertyValue", "name": "Calories", "value": data.calories },
+            { "@type": "PropertyValue", "name": "Protein", "value": data.protein },
+            { "@type": "PropertyValue", "name": "Fat", "value": data.fat },
+            { "@type": "PropertyValue", "name": "Carbohydrates", "value": data.carbohydrates },
+            { "@type": "PropertyValue", "name": "Sugars", "value": data.sugars },
+            { "@type": "PropertyValue", "name": "Sodium", "value": data.sodium },
+            { "@type": "PropertyValue", "name": "Cholesterol", "value": data.cholesterol }
+          ]
+        }
+      ]
+    };
+
+    // Inject JSON-LD into <head>
+    const ldScript = document.createElement("script");
+    ldScript.type = "application/ld+json";
+    ldScript.textContent = JSON.stringify(ld);
+    document.head.appendChild(ldScript);
+
+  } catch (err) {
+    console.error("Dynamic meta failed:", err);
+  }
+});
+</script>
+
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-YXSSM718Z2");
+  </script>
+
+</head>
+ <body class="text-gray-800 min-h-screen">
+ <header class="sticky top-0 bg-white/90 backdrop-blur-md shadow-sm py-3 px-4 flex justify-between items-center z-20 border-b border-gray-100">
+        <div class="flex items-center space-x-3">
+            <a href="index.html" class="flex items-center space-x-3">
+                <div class="logo-glow">
+                    <div class="logo-gradient w-10 h-10 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/>
+                            <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M15 9L9 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M15 15L9 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+                <h1 class="text-xl font-black premium-text tracking-tight">FASTFOODINSIGHT</h1>
+            </a>
+        </div>
+        
+        <nav class="hidden md:flex space-x-4">
+            <a href="index.html#service" class="text-gray-600 hover:text-blue-600 font-semibold transition">Service</a>
+            <a href="index.html#brands" class="text-gray-600 hover:text-blue-600 font-semibold transition">Brands</a>
+             <a href="FastFoodInsightAI.html" class="text-gray-600 hover:text-blue-600 font-medium transition">Chat</a>
+            <a href="index.html#features" class="text-gray-600 hover:text-blue-600 font-semibold transition">Features</a>
+            <a href="index.html#about" class="text-gray-600 hover:text-blue-600 font-semibold transition">About</a>
+        </nav>
+        <button id="mobileMenuBtn" class="md:hidden text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+    </header>
+
+    <!-- Mobile Navigation - EXACTLY like index.html -->
+    <div id="mobileNav" class="mobile-nav fixed inset-0 bg-white z-30 p-6 md:hidden">
+        <div class="flex justify-between items-center mb-6">
+            <a href="index.html" class="flex items-center space-x-3">
+                <div class="logo-glow">
+                    <div class="logo-gradient w-10 h-10 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/>
+                            <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M15 9L9 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M15 15L9 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+                <h1 class="text-lg font-black premium-text tracking-tight">FASTFOODINSIGHT</h1>
+            </a>
+            <button id="closeMobileMenu" class="text-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <nav class="flex flex-col space-y-4">
+            <a href="index.html#service" class="text-gray-600 hover:text-blue-600  text-base transition py-2 border-b border-gray-100">Service</a>
+            <a href="index.html#brands" class="text-gray-600 hover:text-blue-600  text-base transition py-2 border-b border-gray-100">Brands</a>
+  <a href="FastFoodInsightAI.html" class="text-gray-600 hover:text-blue-600 font-medium transition">Chat</a>
+            <a href="index.html#features" class="text-gray-600 hover:text-blue-600  text-base transition py-2 border-b border-gray-100">Features</a>
+            <a href="index.html#about" class="text-gray-600 hover:text-blue-600  text-base transition py-2 border-b border-gray-100">About</a>
+        </nav>
+    </div>
+    
+          
+    <div class="px-4 py-6">
+        <header class="flex items-center mb-6 pt-2">
+            <a href="index.html"
+            class=""><button
+                id="backBtn"
+                class="flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-full shadow-md hover:from-blue-700 hover:to-blue-600 transition duration-300">
+                <i class="fas fa-arrow-left text-sm"></i>
+            </button></a>
+            <h1 class="text-xl font-bold text-blue-800 ml-4">Nutrition Details</h1>
+        </header>
+
+        <main class="w-full max-w-3xl mx-auto">
+           <div class="glass-card rounded-2xl shadow-lg p-6 mb-6 text-center">
+    <h1 id="itemName" class="text-2xl md:text-3xl font-bold text-blue-700 mb-4">Loading...</h1>
+    
+      <div class="location-badge-container mb-4">
+        <span id="branchName" class="location-badge" role="status" aria-label="Restaurant branch">
+            <i class="fas fa-store location-badge-icon" aria-hidden="true"></i>
+            <span id="branchText" class="location-badge-text"></span>
+            <span class="sr-only">Branch </span>
+        </span>
+        
+        <span id="countryName" class="location-badge" role="status" aria-label="Country location">
+            <i class="fas fa-globe-americas location-badge-icon" aria-hidden="true"></i>
+            <span id="countryText" class="location-badge-text"></span>
+            <span class="sr-only">Country </span>
+        </span>
+    </div>
+    
+    <div class="flex justify-center items-center text-gray-600">
+        <i class="fas fa-weight text-sm mr-2"></i>
+        <span id="serving_size" class="text-sm"></span>
+    </div>
+</div>
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <div class="nutrition-card p-4 rounded-xl shadow bg-gradient-to-r from-orange-100 to-orange-50">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-fire text-orange-500 text-sm mr-2"></i>
+                        <span class="text-xs font-semibold text-gray-600">Calories</span>
+                    </div>
+                    <span id="calories" class="text-lg font-bold text-gray-900 block"></span>
+                    <span class="text-xs text-gray-500">kcal</span>
+                </div>
+
+                <div class="nutrition-card p-4 rounded-xl shadow bg-gradient-to-r from-green-100 to-green-50">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-dumbbell text-green-500 text-sm mr-2"></i>
+                        <span class="text-xs font-semibold text-gray-600">Protein</span>
+                    </div>
+                    <span id="protein" class="text-lg font-bold text-gray-900 block"></span>
+                    <span class="text-xs text-gray-500">g</span>
+                </div>
+
+                <div class="nutrition-card p-4 rounded-xl shadow bg-gradient-to-r from-red-100 to-red-50">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-oil-can text-red-500 text-sm mr-2"></i>
+                        <span class="text-xs font-semibold text-gray-600">Total Fat</span>
+                    </div>
+                    <span id="total_fat" class="text-lg font-bold text-gray-900 block"></span>
+                    <span class="text-xs text-gray-500">g</span>
+                </div>
+
+                <div class="nutrition-card p-4 rounded-xl shadow bg-gradient-to-r from-teal-100 to-teal-50">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-bread-slice text-teal-500 text-sm mr-2"></i>
+                        <span class="text-xs font-semibold text-gray-600">Carbs</span>
+                    </div>
+                    <span id="carbohydrates" class="text-lg font-bold text-gray-900 block"></span>
+                    <span class="text-xs text-gray-500">g</span>
+                </div>
+            </div>
+
+            <div id="nutritionDetails" class="glass-card rounded-2xl shadow-lg p-5 mb-6 opacity-0 transition-opacity duration-300">
+                <h2 class="text-lg font-bold text-blue-700 mb-4 flex items-center">
+                    <i class="fas fa-chart-bar text-blue-500 mr-2"></i>
+                    Detailed Nutrition
+                </h2>
+
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                        <span class="text-sm font-medium text-gray-700 flex items-center"><i class="fas fa-weight text-red-400 text-sm mr-3"></i>Saturated Fat</span>
+                        <span><span id="saturated_fat" class="font-bold"></span> g</span>
+                    </div>
+
+                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                        <span class="text-sm font-medium text-gray-700 flex items-center"><i class="fas fa-exchange-alt text-pink-400 text-sm mr-3"></i>Trans Fat</span>
+                        <span><span id="trans_fat" class="font-bold"></span> g</span>
+                    </div>
+
+                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                        <span class="text-sm font-medium text-gray-700 flex items-center"><i class="fas fa-heartbeat text-amber-500 text-sm mr-3"></i>Cholesterol</span>
+                        <span><span id="cholesterol" class="font-bold"></span> mg</span>
+                    </div>
+
+                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                        <span class="text-sm font-medium text-gray-700 flex items-center"><i class="fas fa-cube text-blue-400 text-sm mr-3"></i>Sodium</span>
+                        <span><span id="sodium" class="font-bold"></span> mg</span>
+                    </div>
+
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-sm font-medium text-gray-700 flex items-center"><i class="fas fa-candy-cane text-pink-500 text-sm mr-3"></i>Sugars</span>
+                        <span><span id="sugars" class="font-bold"></span> g</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl shadow-lg p-5 text-center">
+                <i class="fas fa-info-circle text-blue-500 text-xl mb-2"></i>
+                <h3 class="text-md font-bold text-blue-700 mb-1">Daily Value Reference</h3>
+                <p class="text-xs text-gray-600">Based on a 2,000 calorie diet. Individual needs may vary.</p>
+            </div>
+        </main>
+    </div>
+
+  <!-- JS -->
+  <script src="item.js"></script>
+</body>
+</html>

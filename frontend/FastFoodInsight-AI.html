@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>FastFoodInsight AI - Nutrition Assistant | Instant Fast Food Nutrition Analysis</title>
+    <meta name="description" content="FastFoodInsight AI: World's first AI-powered nutrition assistant for fast food. Get instant nutritional analysis, health recommendations, and dietary insights for 23,000+ fast food items worldwide.">
+    <meta name="keywords" content="fast food nutrition AI, AI nutrition assistant, fast food calorie analyzer, dietary analysis AI, health recommendations for fast food, nutrition chatbot, fast food meal planner, dietary insights, food nutrition analysis, healthy fast food choices AI">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.fastfoodinsight.com/FastFoodInsight-AI.html" />
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="FastFoodInsight AI - Nutrition Assistant | Instant Fast Food Nutrition Analysis">
+    <meta property="og:description" content="World's first AI-powered nutrition assistant for fast food. Get instant nutritional analysis for 23,000+ items worldwide.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.fastfoodinsight.com/FastFoodInsight-AI.html">
+    <meta property="og:image" content="https://fastfoodinsight.com/favicon.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:site_name" content="FastFoodInsight">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FastFoodInsight AI - Nutrition Assistant">
+    <meta name="twitter:description" content="AI-powered nutrition assistant for fast food analysis and health recommendations.">
+    <meta name="twitter:image" content="https://fastfoodinsight.com/favicon.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="48x48">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    
+    <!-- Bing Webmaster Tools -->
+    <meta name="msvalidate.01" content="2116E4A2E8F896214E09646F77B16C23" />
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="chat.css">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "FastFoodInsight AI Nutrition Assistant",
+        "description": "AI-powered nutrition analysis tool providing instant nutritional insights, health recommendations, and dietary analysis for fast food items worldwide.",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Web",
+        "url": "https://www.fastfoodinsight.com/FastFoodInsight-AI.html",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "FastFoodInsight",
+            "url": "https://www.fastfoodinsight.com/"
+        },
+        "featureList": [
+            "AI-powered nutrition analysis",
+            "Personalized health recommendations",
+            "Fast food item identification",
+            "Country-specific nutritional data",
+            "Dietary restriction analysis",
+            "Health goal tracking",
+            "Meal planning assistance"
+        ],
+        "softwareVersion": "1.0"
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is FastFoodInsight AI?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "FastFoodInsight AI is an artificial intelligence-powered nutrition assistant that provides instant analysis, health recommendations, and dietary insights for over 23,000 fast food items across 80+ countries and 9 major fast food chains."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How does the AI nutrition assistant work?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Simply ask about any fast food item (e.g., 'Big Mac nutrition at McDonald's in USA'), and the AI analyzes nutritional data, provides health recommendations, suggests alternatives, and helps track dietary goals based on your health objectives."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What health goals does FastFoodInsight AI support?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The AI supports six primary health goals: Basic Nutrition, Weight Loss, Muscle Gain, Diabetes Management, Blood Pressure Control, and Heart Health, providing tailored recommendations for each objective."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is FastFoodInsight AI free to use?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, FastFoodInsight AI offers free access with 10 complimentary message, and users can sign up for continued access. The service provides valuable nutritional insights without cost barriers."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Which fast food chains does the AI support?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The AI supports 9 major fast food chains: McDonald's, Burger King, KFC, Pizza Hut, Starbucks, Wendy's, Domino's, Dunkin', and Taco Bell, with country-specific nutritional data for each."
+                }
+            }
+        ]
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "FastFoodInsight AI Nutrition Assistant",
+        "description": "Interactive AI chatbot for fast food nutrition analysis and health recommendations",
+        "url": "https://www.fastfoodinsight.com/FastFoodInsight-AI.html",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Any",
+        "permissions": "Microphone (optional), Geolocation (optional)",
+        "featureList": [
+            "Natural language processing",
+            "Real-time nutrition analysis",
+            "Personalized health insights",
+            "Chat history storage",
+            "Multiple health goal profiles",
+            "Cross-platform compatibility"
+        ],
+        "countriesSupported": "Worldwide",
+        "author": {
+            "@type": "Organization",
+            "name": "FastFoodInsight",
+            "url": "https://www.fastfoodinsight.com/"
+        }
+    }
+    </script>
+
+    <!-- Google Analytics Script -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXSSM718Z2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YXSSM718Z2');
+    </script>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <div class="mobile-header">
+        <h1><i class="fas fa-hamburger"></i> <a href="index.html">FastFoodInsight</a></h1>
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- App Container -->
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-hamburger"></i> <span>FastFoodInsight AI</span></h1>
+                <div class="tagline">World's Largest Fast Food Nutrition Database</div>
+                <button class="sidebar-close" onclick="toggleSidebar()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- User Info -->
+            <div class="user-info" id="userInfo">
+                <div class="user-avatar" id="userAvatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-name" id="userName">Guest User</div>
+            </div>
+            
+            <div class="new-chat-section" id="newChatSection" style="display: none;">
+                <button class="new-chat-btn" onclick="createNewChat()">
+                    <i class="fas fa-plus"></i> New Chat
+                </button>
+            </div>
+            
+            <!-- Chat History -->
+            <div class="chat-history" id="chatHistory">
+                <h3>
+                    <i class="fas fa-history"></i> Chat History
+                    <div class="history-actions">
+                        <button class="history-btn" onclick="refreshHistory()" title="Refresh">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                        <button class="history-btn" onclick="clearHistory()" title="Clear">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </h3>
+                <div class="history-list" id="historyList"></div>
+                <div class="no-history" id="noHistory">
+                    <i class="fas fa-comment-slash"></i>
+                    <p>No chat history yet</p>
+                </div>
+            </div>
+            
+            <!-- Goal Selector -->
+            <div class="goal-selector">
+                <h3><i class="fas fa-bullseye"></i> Health Goal</h3>
+                <div class="goal-buttons">
+                    <button class="goal-btn active" onclick="setGoal('basic')">
+                        <i class="fas fa-utensils"></i>
+                        <span>Basic Nutrition</span>
+                    </button>
+                    <button class="goal-btn" onclick="setGoal('weight_loss')">
+                        <i class="fas fa-running"></i>
+                        <span>Weight Loss</span>
+                    </button>
+                    <button class="goal-btn" onclick="setGoal('weight_gain')">
+                        <i class="fas fa-dumbbell"></i>
+                        <span>Muscle Gain</span>
+                    </button>
+                    <button class="goal-btn" onclick="setGoal('diabetes')">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>Diabetes</span>
+                    </button>
+                    <button class="goal-btn" onclick="setGoal('bp')">
+                        <i class="fas fa-heart"></i>
+                        <span>Blood Pressure</span>
+                    </button>
+                    <button class="goal-btn" onclick="setGoal('heart')">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>Heart Health</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Quick Queries -->
+            <div class="quick-queries">
+                <h3><i class="fas fa-bolt"></i> Quick Queries</h3>
+                <div class="query-buttons">
+                    <button class="query-btn" onclick="quickQuery('Zinger Burger at KFC in UK')">
+                        <i class="fas fa-drumstick-bite"></i>
+                        <span>Zinger Burger (UK)</span>
+                    </button>
+                    <button class="query-btn" onclick="quickQuery('Big Mac at McDonalds in USA')">
+                        <i class="fas fa-hamburger"></i>
+                        <span>Big Mac (USA)</span>
+                    </button>
+                    <button class="query-btn" onclick="quickQuery('Coffee at Starbucks in Australia')">
+                        <i class="fas fa-coffee"></i>
+                        <span>Coffee (Australia)</span>
+                    </button>
+                    <button class="query-btn" onclick="quickQuery('Whopper at Burger King in Canada')">
+                        <i class="fas fa-burger"></i>
+                        <span>Whopper (Canada)</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Usage Warning -->
+            <div class="usage-warning" id="usageWarning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div class="warning-content">
+                    <strong>You have 1 free message left</strong>
+                    <span>Sign up now to continue using FastFoodInsight AI!</span>
+                </div>
+                <button class="warning-action" onclick="showLoginModal()">Sign Up Free</button>
+            </div>
+
+            <div class="chat-header">
+                <h2><i class="fas fa-comment-medical"></i> FastFoodInsight Nutrition Assistant</h2>
+                <div class="user-actions">
+                    <button class="auth-btn" id="authButton" onclick="showLoginModal()">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                    <button class="logout-btn" id="logoutButton" onclick="confirmLogout()" style="display: none;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                    <div class="status">
+                        <div class="status-dot"></div>
+                        <span id="statusText">Online</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="messages-container" id="messages" tabindex="-1" aria-live="polite"></div>
+
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <div class="input-area">
+                        <textarea 
+                            id="userInput" 
+                            placeholder="Ask about any food item (e.g., 'Big Mac nutrition at McDonalds in USA')..." 
+                            rows="1"
+                            oninput="autoResize(this)"
+                            onkeydown="handleEnter(event)"
+                        ></textarea>
+                        <div class="input-hint">
+                            <i class="fas fa-arrow-up"></i>
+                            <span></span>
+                        </div>
+                    </div>
+                    <button class="send-button" id="sendButton" onclick="handleSendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verification Modal -->
+    <div class="modal-overlay" id="verificationModal">
+        <div class="modal">
+            <button class="modal-close" onclick="hideVerificationModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <h2><i class="fas fa-shield-alt"></i> Verify Your Email</h2>
+                <p>Enter the 6-digit verification code sent to your email</p>
+            </div>
+            <div class="modal-content">
+                <div class="form-group">
+                    <label for="verifyEmail">Email</label>
+                    <input type="email" id="verifyEmail" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="verifyCode">Verification Code</label>
+                    <input type="text" id="verifyCode" class="form-control" placeholder="123456" maxlength="6">
+                    <div class="form-error" id="verifyError"></div>
+                    <small class="form-help">Check your email inbox and spam folder</small>
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn-primary" onclick="handleVerifyCode()">
+                        <i class="fas fa-check-circle"></i> Verify & Continue
+                    </button>
+                    <button class="btn-secondary" onclick="resendVerificationCode()">
+                        <i class="fas fa-redo"></i> Resend Code
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+    <div class="modal">
+        <button class="modal-close" onclick="hideLoginModal()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-header">
+            <h2><i class="fas fa-hamburger"></i> FastFoodInsight AI</h2>
+            <p>Sign in to access unlimited nutrition analysis</p>
+        </div>
+        <div class="modal-content">
+            <!-- Google Sign-In Button - VISIBLE ALWAYS -->
+            <div class="form-group" style="text-align: center; margin-bottom: 25px;">
+    <button id="googleSignInBtn" class="google-btn" onclick="triggerGoogleLogin()" style="
+        background: white;
+        color: #4285f4;
+        border: 2px solid #4285f4;
+        padding: 14px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 16px;
+        width: 100%;
+        max-width: 320px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        box-shadow: 0 2px 8px rgba(66, 133, 244, 0.2);
+    ">
+        <i class="fab fa-google" style="font-size: 20px;"></i>
+        Continue with Google
+    </button>
+            </div>
+            
+            <!-- Divider -->
+            <div style="text-align: center; margin: 20px 0; position: relative;">
+                <div style="border-top: 1px solid #e0e0e0; position: absolute; top: 50%; left: 0; right: 0;"></div>
+                <span style="background: white; padding: 0 15px; color: #666; font-size: 14px; position: relative;">
+                    
+                </span>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="emailPasswordForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="you@example.com" autocomplete="email">
+                    <div class="form-error" id="emailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" autocomplete="current-password">
+                    <div class="form-error" id="passwordError"></div>
+                </div>
+                
+                <div class="modal-buttons">
+                    <button class="btn-primary" onclick="handleEmailPasswordLogin()">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                    <button class="btn-secondary" onclick="showSignupForm()">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                </div>
+                
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="javascript:void(0)" onclick="showForgotPassword()" style="color: #3B82F6; font-size: 14px; text-decoration: none;">
+                        <i class="fas fa-key"></i> Forgot Password?
+                    </a>
+                </div>
+            </div>
+                
+                <!-- Signup Form -->
+                <div id="signupForm" style="display: none;">
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" class="form-control" placeholder="Enter your name">
+                        <div class="form-error" id="signupNameError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address</label>
+                        <input type="email" id="signupEmail" class="form-control" placeholder="you@example.com">
+                        <div class="form-error" id="signupEmailError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" class="form-control" placeholder="Minimum 8 characters">
+                        <div class="form-error" id="signupPasswordError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupConfirmPassword">Confirm Password</label>
+                        <input type="password" id="signupConfirmPassword" class="form-control" placeholder="Confirm your password">
+                        <div class="form-error" id="signupConfirmError"></div>
+                    </div>
+                    
+                    <div class="modal-buttons">
+                        <button class="btn-primary" onclick="handleEmailSignup()">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </button>
+                        <button class="btn-secondary" onclick="showLoginForm()">
+                            <i class="fas fa-sign-in-alt"></i> Back to Sign In
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="chat.js"></script>
+</body>
+</html>
