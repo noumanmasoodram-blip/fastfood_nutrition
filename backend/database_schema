@@ -1,0 +1,114 @@
+-- This script is for PostgreSQL, as used on Heroku.
+-- Database creation and connection commands must be run outside this script or via \c command in psql.
+
+ table_name |        column_name        |          data_type          | is_nullable
+------------+---------------------------+-----------------------------+-------------
+ chat_usage | id                        | integer                     | NO
+ chat_usage | user_id                   | integer                     | YES
+ chat_usage | anonymous_id              | character varying           | YES
+ chat_usage | message_count             | integer                     | YES
+ chat_usage | last_message_at           | timestamp without time zone | YES
+ chat_usage | created_at                | timestamp without time zone | YES
+ users      | id                        | integer                     | NO
+ users      | user_identifier           | character varying           | YES
+ users      | goal                      | character varying           | YES
+ users      | created_at                | timestamp without time zone | YES
+ users      | last_active               | timestamp without time zone | YES
+ users      | trial_start               | timestamp without time zone | YES
+ users      | trial_end                 | timestamp without time zone | YES
+ users      | email                     | character varying           | YES
+ users      | password_hash             | character varying           | YES
+ users      | name                      | character varying           | YES
+ users      | avatar_url                | text                        | YES
+ users      | google_id                 | character varying           | YES
+ users      | verification_token        | text                        | YES
+ users      | verification_token_expiry | timestamp without time zone | YES
+ users      | is_verified               | boolean                     | YES
+ users      | reset_token               | text                        | YES
+ users      | reset_token_expiry        | timestamp without time zone | YES
+ users      | free_trial_start          | timestamp without time zone | YES
+
+
+table_name
+-------------------------
+ anonymous_sessions
+ branch_locations
+ branches
+ chat_history
+ chat_messages
+ chat_sessions
+ chat_usage
+ countries
+ email_tests
+ ffi_country_standards
+ food_items
+ pg_stat_statements
+ pg_stat_statements_info
+ users
+ view_food_items_ffi  
+-- ===============================
+-- 1️⃣ Countries Table
+-- ===============================
+DROP TABLE IF EXISTS countries CASCADE;
+CREATE TABLE countries (
+  -- SERIAL is the correct PostgreSQL auto-increment type
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- ===============================
+-- 2️⃣ Branches Table
+-- ===============================
+DROP TABLE IF EXISTS branches CASCADE;
+CREATE TABLE branches (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- ===============================
+-- 3️⃣ Branch Locations Table
+-- ===============================
+DROP TABLE IF EXISTS branch_locations CASCADE;
+CREATE TABLE branch_locations (
+  id SERIAL PRIMARY KEY,
+  branch_id INT NOT NULL,
+  country_id INT NOT NULL,
+
+  -- Correction: PostgreSQL uses 'UNIQUE' instead of 'UNIQUE KEY'
+  CONSTRAINT unique_branch_country UNIQUE (branch_id, country_id),
+
+  FOREIGN KEY (branch_id) REFERENCES branches (id) ON DELETE CASCADE,
+  FOREIGN KEY (country_id) REFERENCES countries (id) ON DELETE CASCADE
+);
+
+-- ===============================
+-- 4️⃣ Food Entries Table
+-- ===============================
+
+
+-- ===============================
+-- 5️⃣ Food Items Table
+-- ===============================
+DROP TABLE IF EXISTS food_items CASCADE;
+CREATE TABLE food_items (
+  id SERIAL PRIMARY KEY,
+  branch_location_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  serving_size VARCHAR(50) DEFAULT NULL,
+  calories INT DEFAULT NULL,
+  total_fat FLOAT DEFAULT NULL,
+  saturated_fat FLOAT DEFAULT NULL,
+  trans_fat FLOAT DEFAULT NULL,
+  cholesterol INT DEFAULT NULL,
+  sodium INT DEFAULT NULL,
+  carbohydrates FLOAT DEFAULT NULL,
+  sugars FLOAT DEFAULT NULL,
+  protein FLOAT DEFAULT NULL,
+  FOREIGN KEY (branch_location_id) REFERENCES branch_locations (id) ON DELETE CASCADE
+);
+
+ALTER TABLE users
+ADD subscription_status VARCHAR(20),
+ADD subscription_plan VARCHAR(20),
+ADD subscription_expiry DATETIME,
+ADD creem_customer_id VARCHAR(100);
