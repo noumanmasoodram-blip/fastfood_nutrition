@@ -1,417 +1,791 @@
-// === UI ELEMENT SELECTORS ===
-const countrySelect = document.getElementById("countrySelect");
-const branchSection = document.getElementById("branchSection");
-const branchContainer = document.getElementById("branchContainer");
-const searchSection = document.getElementById("searchSection");
-const searchInput = document.getElementById("searchInput");
-const resultsDiv = document.getElementById("results");
-const randomBtn = document.getElementById("randomBtn");
-const clearFilters = document.getElementById("clearFilters");
-const selectedBranch = document.getElementById("selectedBranch");
-const selectedCountry = document.getElementById("selectedCountry");
-const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-const mobileNav = document.getElementById("mobileNav");
-const closeMobileMenu = document.getElementById("closeMobileMenu");
-const backToTop = document.getElementById("backToTop");
-
-let currentCountryId = null;
-let currentBranchId = null;
-let foodItems = [];
-
-// Logo mapping for known brands (Assuming these images are available in the root of your Netlify deployment)
-const brandLogos = {
- "burger king": "/burgerking1.png",
- "dominos": "/domino1.png",
- "domino's": "/domino2.png",
- "dunkin": "/dunkin1.png",
- "dunkin'": "/dunkin2.png",
- "mcdonald": "/mcdonalds1.png",
- "mcdonald's": "/mcdonalds2.png",
- "pizza hut": "/pizzahut1.png",
- "starbucks": "/starbucks1.png",
- "taco bell": "/tacobell1.png",
- "wendys": "/wendys1.png",
- "wendy's": "/wendys2.png",
- "kfc": "/kfc1.png",
- "kentucky fried chicken": "/kfc2.png", 
- "subway": "/subway1.png"
-};
-
-// Initialize countries on page load
-async function fetchCountries() {
- try {
-  // 🔑 FIX: Removed backendUrl variable, using relative path /api/countries
-  const res = await fetch(`/api/countries`);
-  if (!res.ok) throw new Error("Failed to fetch countries");
-  const countries = await res.json();
-
-  countrySelect.innerHTML = '<option value="">Select Country</option>';
-  countries.forEach(country => {
-   const option = document.createElement("option");
-   option.value = country.id;
-   option.textContent = country.name;
-   countrySelect.appendChild(option);
-  });
- } catch (err) {
-  console.error("Error fetching countries:", err);
-  // Display error message to user
-  countrySelect.innerHTML = '<option value="">Failed to load countries</option>';
- }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+ <title>Fast Food Nutrition Facts: Calories, Fat, & More Worldwide | FastFoodInsight</title>
+    <meta name="description" content="The world's most comprehensive database for fast food nutrition facts. Find calories, fat, and dietary info for 23,000+ items across 9 major chains in 80+ countries.">
+    <meta name="msvalidate.01" content="2116E4A2E8F896214E09646F77B16C23" />
+    <link rel="canonical" href="https://www.fastfoodinsight.com/">
+    
+ <link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon.png" sizes="48x48">
+<link rel="apple-touch-icon" href="/favicon.png">
+<!-- ✅ Social sharing / preview image -->
+<meta property="og:image" content="https://fastfoodinsight.com/favicon.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="hello.css">
+  <link rel="stylesheet" href="main.css">
+   <!-- ✅ ORGANIZATION SCHEMA -->
+<!-- ✅ ORGANIZATION SCHEMA -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "FastFoodInsight",
+  "url": "https://www.fastfoodinsight.com/",
+  "logo": "https://www.fastfoodinsight.com/favicon.png",
+  "description": "FastFoodInsight is a global nutrition insights platform providing fast food calorie and nutrient data for over 23,771 menu items worldwide."
 }
+</script>
 
-async function fetchBranches(countryId) {
- try {
-  branchContainer.innerHTML = '<div class="col-span-full text-center py-8"><div class="loading-spinner mx-auto mb-3 border-blue-500"></div><p class="text-gray-500">Loading branches...</p></div>';
-  
-  // 🔑 FIX: Removed backendUrl variable, using relative path /api/branches
-  const res = await fetch(`/api/branches?country_id=${countryId}`);
-  if (!res.ok) throw new Error("Failed to fetch branches");
-  const branches = await res.json();
-
-  branchContainer.innerHTML = '';
-  
-  if (branches.length === 0) {
-   branchContainer.innerHTML = '<div class="col-span-full text-center py-4 text-gray-500"><i class="fas fa-store-slash text-2xl mb-2"></i><p>No branches available for this country</p></div>';
-   return;
-  }
-
-  branches.forEach(branch => {
-   // ... (rest of your branch item creation logic remains the same)
-   const branchItem = document.createElement("div");
-   branchItem.className = "branch-item";
-   branchItem.dataset.branchId = branch.id;
-   branchItem.dataset.branchName = branch.name;
-   
-   // Find the appropriate logo
-   const branchNameLower = branch.name.toLowerCase();
-   let logoUrl = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIiBmaWxsPSIjMDAwIj48dGV4dCB4PSI4MCIgeT0iMTMwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiPkJyYW5jaDwvdGV4dD48L3N2Zz4=";
-   
-   // Check for exact matches first
-   if (brandLogos[branchNameLower]) {
-    logoUrl = brandLogos[branchNameLower];
-   } else {
-    // Check for partial matches
-    for (const [key, url] of Object.entries(brandLogos)) {
-     if (branchNameLower.includes(key)) {
-      logoUrl = url;
-      break;
-     }
-    }
-   }
-   
-   branchItem.innerHTML = `
-    <img src="${logoUrl}" 
-      alt="${branch.name}" 
-      class="branch-logo rounded-lg object-contain"
-      onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIiBmaWxsPSIjMDAwIj48dGV4dCB4PSI4MCIgeT0iMTMwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiPkJyYW5jaDwvdGV4dD48L3N2Zz4='">
-    <span class="branch-name">${branch.name}</span>
-   `;
-   
-   branchItem.addEventListener("click", () => {
-    // Remove active class from all items
-    document.querySelectorAll(".branch-item").forEach(item => {
-     item.classList.remove("active");
-     item.querySelector(".branch-logo").classList.remove("active");
-    });
-    
-    // Add active class to clicked item
-    branchItem.classList.add("active");
-    branchItem.querySelector(".branch-logo").classList.add("active");
-    
-    currentBranchId = branch.id;
-    selectedBranch.textContent = branch.name;
-    
-    // Show search section
-    searchSection.classList.remove("hidden");
-    
-    // Scroll to search section on mobile
-    if (window.innerWidth < 768) {
-     searchSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    
-    // Fetch menu items
-    fetchItems(currentCountryId, currentBranchId);
-   });
-   
-   branchContainer.appendChild(branchItem);
-  });
- } catch (err) {
-  console.error("Error fetching branches:", err);
-  branchContainer.innerHTML = '<div class="col-span-full text-center py-4 text-gray-500"><i class="fas fa-exclamation-triangle text-2xl mb-2"></i><p>Failed to load branches</p></div>';
- }
+<!-- ✅ WEBSITE SCHEMA -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "FastFoodInsight",
+  "url": "https://www.fastfoodinsight.com/"
 }
+</script>
 
-async function fetchItems(countryId, branchId) {
- try {
-  resultsDiv.innerHTML = `
-   <div class="col-span-full text-center py-8">
-    <div class="loading-spinner mx-auto mb-3 border-blue-500"></div>
-    <p class="text-gray-600">Loading menu items...</p>
-   </div>
-  `;
-  
-  // 🔑 FIX: Removed backendUrl variable, using relative path /api/items
-  const res = await fetch(`/api/items?country_id=${countryId}&branch_id=${branchId}`);
-  if (!res.ok) throw new Error("Failed to fetch items");
-  foodItems = await res.json();
-  
-  displayResults(foodItems);
- } catch (err) {
-  console.error("Error fetching items:", err);
-  resultsDiv.innerHTML = `
-   <div class="col-span-full text-center py-8">
-    <i class="fas fa-exclamation-triangle text-4xl text-gray-400 mb-3"></i>
-    <h3 class="text-base font-medium text-gray-700 mb-1">Failed to load menu items</h3>
-    <p class="text-gray-500 text-sm">Please try again later</p>
-   </div>
-  `;
- }
-}
-
-function displayResults(items) {
- resultsDiv.innerHTML = "";
- if (items.length === 0) {
-  resultsDiv.innerHTML = `
-   <div class="col-span-full text-center py-8">
-    <i class="fas fa-search text-4xl text-gray-400 mb-3"></i>
-    <h3 class="text-base font-medium text-gray-700 mb-1">No menu items found</h3>
-    <p class="text-gray-500 text-sm">Try adjusting your search term</p>
-   </div>
-  `;
-  return;
- }
-
- // ✅ Food categories and icons (rest of this logic is unchanged)
- const foodCategories = {
-  // ... (rest of your foodCategories object)
-  pizza: {
-   icon: `<i class="fas fa-pizza-slice"></i>`,
-   keywords: ['pizza', 'margherita', 'pepperoni', 'supreme', 'hawaiian', 'cheese', 'meat lovers', 'veggie lovers']
-  },
-  chicken: {
-   icon: `<i class="fas fa-drumstick-bite"></i>`,
-   keywords: ['chicken', 'wing', 'nugget', 'tender', 'fillet', 'popcorn', 'fried chicken', 'grilled chicken']
-  },
-  fries: {
-   icon: `<i class="fas fa-bowl-food"></i>`,
-   keywords: [
-    'fries', 'french fries', 'potato', 'chips', 'crispy fries', 'potato wedges', 'curly fries', 
-    'waffle fries', 'seasoned fries', 'crinkle fries', 'sweet potato fries', 'loaded fries',
-    'cheese fries', 'bacon fries', 'golden fries', 'potato twisters', 'potato sticks',
-    'hash brown', 'hashbrowns', 'fries box', 'fries meal', 'potato chips', 'potato fries',
-    'thick cut fries', 'steak fries'
-   ]
-  },
-  mashed_potatoes: {
-   icon: `<i class="fas fa-utensil-spoon"></i>`,
-   keywords: [
-    'mashed potato', 'mashed potatoes', 'potato mash', 'mashed potatoes with gravy',
-    'mashed potato bowl', 'potato bowl', 'potato puree', 'pureed potato'
-   ]
-  },
-  baked_potatoes: {
-   icon: `<i class="fas fa-utensils"></i>`,
-   keywords: ['baked potato', 'baked potatoes', 'potato skins', 'stuffed potato']
-  },
-  burger: {
-   icon: `<i class="fas fa-hamburger"></i>`,
-   keywords: ['burger', 'whopper', 'cheeseburger', 'hamburger', 'big mac']
-  },
-  sandwich: {
-   icon: `<i class="fas fa-bread-slice"></i>`,
-   keywords: ['sandwich', 'wrap', 'sub', 'panini', 'club']
-  },
-  pasta: {
-   icon: `<i class="fas fa-bowl-rice"></i>`,
-   keywords: ['pasta', 'macaroni', 'spaghetti', 'mac & cheese', 'lasagna']
-  },
-  coffee: {
-   icon: `<i class="fas fa-coffee"></i>`,
-   keywords: ['coffee', 'latte', 'cappuccino', 'espresso', 'frappuccino']
-  },
-  drink: {
-   icon: `<i class="fas fa-glass-whiskey"></i>`,
-   keywords: ['drink', 'juice', 'tea', 'lemonade', 'soda', 'water', 'smoothie', 'shake']
-  },
-  dessert: {
-   icon: `<i class="fas fa-ice-cream"></i>`,
-   keywords: ['ice cream', 'cake', 'cookie', 'pie', 'brownie', 'donut', 'muffin']
-  },
-  sauce: {
-   icon: `<i class="fas fa-fill-drip"></i>`,
-   keywords: ['sauce', 'dip', 'dressing', 'ketchup', 'mayo', 'mustard', 'ranch', 'gravy']
-  }
- };
-
- // ✅ Fallback icons for random/unique foods
- const randomIcons = [
-  `<i class="fas fa-bowl-food"></i>`,
-  `<i class="fas fa-burger"></i>`,
-  `<i class="fas fa-ice-cream"></i>`,
-  `<i class="fas fa-apple-alt"></i>`,
-  `<i class="fas fa-carrot"></i>`,
-  `<i class="fas fa-fish"></i>`,
-  `<i class="fas fa-cookie-bite"></i>`,
-  `<i class="fas fa-hotdog"></i>`,
-  `<i class="fas fa-egg"></i>`,
-  `<i class="fas fa-pepper-hot"></i>`,
-  `<i class="fas fa-bread-slice"></i>`
- ];
-
- function detectFoodCategory(itemName) {
-  const name = itemName.toLowerCase();
-  const priorityOrder = [
-   'fries', 'mashed_potatoes', 'baked_potatoes', 'pizza', 'burger', 'chicken',
-   'sandwich', 'pasta', 'coffee', 'drink', 'dessert', 'sauce'
-  ];
-
-  for (const category of priorityOrder) {
-   const categoryData = foodCategories[category];
-   if (categoryData) {
-    for (const keyword of categoryData.keywords) {
-     if (name.includes(keyword)) return category;
+<!-- ✅ GLOBAL DATASET SCHEMA WITH 9 CHAINS AND FULL 250 KEYWORDS -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "Global Fast Food Nutrition Facts Database",
+  "description": "Comprehensive nutritional details (calories, total fat, protein, sodium, carbohydrates, saturated fat, trans fat, sugars, cholesterol) for over 23,771 menu items across 9 major fast food chains in 80+ countries.",
+  "url": "https://www.fastfoodinsight.com/",
+  "creator": { "@type": "Organization", "name": "FastFoodInsight" },
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "spatialCoverage": "Worldwide",
+  "keywords": [
+    "fast food nutrition facts",
+    "fast food calories",
+    "healthy fast food",
+    "low calorie fast food",
+    "high protein fast food",
+    "gluten free fast food",
+    "vegan fast food",
+    "fast food menu database",
+    "global fast food database",
+    "fast food macro calculator",
+    "fast food calorie counter",
+    "fast food nutrition comparison",
+    "nutrition facts online",
+    "fast food diet tips",
+    "fast food health awareness",
+    "fast food nutritional guide",
+    "compare fast food calories",
+    "calories in popular fast food items",
+    "fast food for kids",
+    "fast food low sugar options"
+  ],
+  "hasPart": [
+    {
+      "@type": "Dataset",
+      "name": "McDonald's Nutrition Dataset",
+      "description": "Detailed nutrition information (calories, total fat, protein, sodium, carbohydrates, saturated fat, trans fat, sugars, cholesterol) for McDonald's menu items worldwide.",
+      "creator": { "@type": "Organization", "name": "FastFoodInsight" },
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "keywords": [
+        "mcdonalds nutrition facts",
+        "mcdonalds calories",
+        "big mac nutrition",
+        "mc chicken calories",
+        "mcdonalds india menu calories",
+        "mcdonalds uk menu nutrition",
+        "mcdonalds usa calories",
+        "mcdonalds breakfast items",
+        "mcdonalds menu calorie breakdown",
+        "mcdonalds protein content",
+        "mcdonalds fast food nutrition",
+        "mcdonalds low calorie options",
+        "mcdonalds high protein meals",
+        "mcdonalds vegan options",
+        "mcdonalds gluten free items",
+        "mcdonalds dessert calories",
+        "mcdonalds side nutrition facts",
+        "mcdonalds meal nutrition",
+        "mcdonalds beverage calories",
+        "mcdonalds combo meals",
+        "mcdonalds kids menu",
+        "mcdonalds macros",
+        "mcdonalds nutrition chart",
+        "mcdonalds calorie guide",
+        "mcdonalds healthy choices",
+        "mcdonalds menu analysis"
+      ],
+      "isPartOf": "https://www.fastfoodinsight.com/"
+    },
+    {
+  "@type": "Dataset",
+  "name": "Dunkin' Nutrition Dataset",
+  "description": "Detailed nutrition information (calories, total fat, protein, sodium, carbohydrates, saturated fat, trans fat, sugars, cholesterol) for Dunkin' menu items worldwide.",
+  "creator": { "@type": "Organization", "name": "FastFoodInsight" },
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "keywords": [
+    "dunkin nutrition facts",
+    "dunkin calories",
+    "dunkin donuts nutrition",
+    "dunkin coffee calories",
+    "dunkin donuts breakfast items",
+    "dunkin donuts protein content",
+    "dunkin donuts low calorie options",
+    "dunkin donuts high protein meals",
+    "dunkin donuts gluten free items",
+    "dunkin donuts vegan options",
+    "dunkin donuts beverages",
+    "dunkin donuts combo meals",
+    "dunkin donuts dessert calories",
+    "dunkin donuts side nutrition",
+    "dunkin donuts kids menu",
+    "dunkin donuts meal nutrition",
+    "dunkin donuts macro calculator",
+    "dunkin donuts menu analysis",
+    "dunkin donuts healthy options",
+    "dunkin donuts calorie comparison",
+    "dunkin donuts global nutrition"
+  ],
+  "isPartOf": "https://www.fastfoodinsight.com/"
+},
+    {
+      "@type": "Dataset",
+      "name": "Burger King Nutrition Dataset",
+      "description": "Detailed nutrition information (calories, total fat, protein, sodium, carbohydrates, saturated fat, trans fat, sugars, cholesterol) for Burger King menu items worldwide.",
+      "creator": { "@type": "Organization", "name": "FastFoodInsight" },
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "keywords": [
+      "burger king nutrition facts",
+        "burger king calories",
+        "whopper nutrition",
+        "burger king pakistan calories",
+        "burger king uk menu calories",
+        "burger king usa nutrition",
+        "burger king breakfast calories",
+        "burger king protein content",
+        "burger king low calorie items",
+        "burger king high protein options",
+        "burger king macro calculator",
+        "burger king vegan options",
+        "burger king gluten free menu",
+        "burger king kids meals",
+        "burger king combo nutrition",
+        "burger king side dishes calories",
+        "burger king dessert calories",
+        "burger king beverage nutrition",
+        "burger king menu breakdown",
+        "burger king nutritional chart",
+        "burger king daily intake",
+        "burger king calories comparison",
+        "burger king macros",
+        "burger king menu analysis",
+        "burger king global data",
+        "burger king healthy choices"
+      ],
+      "isPartOf": "https://www.fastfoodinsight.com/"
+    },
+    {
+      "@type": "Dataset",
+      "name": "KFC Nutrition Dataset",
+      "description": "Detailed nutrition information (calories, total fat, protein, sodium, carbohydrates, saturated fat, trans fat, sugars, cholesterol) for KFC menu items worldwide.",
+      "creator": { "@type": "Organization", "name": "FastFoodInsight" },
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "keywords": [
+        "kfc nutrition facts",
+        "kfc calories",
+        "zinger burger nutrition",
+        "kfc uk nutrition facts",
+        "kfc usa menu calories",
+        "kfc fried chicken nutrition",
+        "kfc low calorie meals",
+        "kfc menu protein content",
+        "kfc nutrition chart",
+        "kfc calorie comparison",
+        "kfc dietary options",
+        "kfc dessert calories",
+        "kfc beverage nutrition",
+        "kfc combo meals",
+        "kfc side dish nutrition",
+        "kfc vegan options",
+        "kfc gluten free options",
+        "kfc breakfast calories",
+        "kfc kids menu",
+        "kfc high protein items",
+        "kfc macro calculator",
+        "kfc menu analysis",
+        "kfc global nutrition",
+        "kfc low fat items",
+        "kfc meal calories",
+        "kfc healthy choices"
+      ],
+      "isPartOf": "https://www.fastfoodinsight.com/"
+    },
+    {
+      "@type": "Dataset",
+      "name": "Pizza Hut Nutrition Dataset",
+      "description": "Detailed nutrition information (calories, total fat, protein, sodium, carbohydrates, saturated fat, trans fat, sugars, cholesterol) for Pizza Hut menu items worldwide.",
+      "creator": { "@type": "Organization", "name": "FastFoodInsight" },
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "keywords": [
+        "pizza hut nutrition facts",
+        "pizza hut calories",
+        "pizza slice nutrition",
+        "pizza hut pakistan calories",
+        "pizza hut usa menu calories",
+        "pizza hut cheese pizza nutrition",
+        "pizza hut protein content",
+        "pizza hut vegan options",
+        "pizza hut low calorie items",
+        "pizza hut nutritional chart",
+        "pizza hut calorie comparison",
+        "pizza hut desserts",
+        "pizza hut beverages",
+        "pizza hut combo meals",
+        "pizza hut sides nutrition",
+        "pizza hut breakfast calories",
+        "pizza hut kids menu",
+        "pizza hut macros",
+        "pizza hut menu analysis",
+        "pizza hut gluten free options",
+        "pizza hut healthy pizza",
+        "pizza hut high protein pizza",
+        "pizza hut low sodium options",
+        "pizza hut sugar free options",
+        "pizza hut meal calories",
+        "pizza hut global data"
+      ],
+      "isPartOf": "https://www.fastfoodinsight.com/"
+    },
+    {
+      "@type": "Dataset",
+      "name": "Starbucks Nutrition Dataset",
+      "description": "Detailed nutrition information (calories, total fat, protein, sodium, carbohydrates, saturated fat, trans fat, sugars, cholesterol) for Starbucks menu items worldwide.",
+      "creator": { "@type": "Organization", "name": "FastFoodInsight" },
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "keywords": [
+        "starbucks nutrition facts",
+        "starbucks calories",
+        "starbucks latte nutrition",
+        "starbucks drinks nutrition",
+        "starbucks low calorie drinks",
+        "starbucks protein drinks",
+        "starbucks vegan options",
+        "starbucks coffee nutrition",
+        "starbucks menu calories",
+        "starbucks smoothies nutrition",
+        "starbucks macro calculator",
+        "starbucks breakfast calories",
+        "starbucks combo meals",
+        "starbucks dessert calories",
+        "starbucks side nutrition",
+        "starbucks kids menu",
+        "starbucks gluten free options",
+        "starbucks beverage calories",
+        "starbucks menu analysis",
+        "starbucks daily intake",
+        "starbucks healthy drinks",
+        "starbucks high protein drinks",
+        "starbucks low sugar drinks",
+        "starbucks nutrition chart",
+        "starbucks global data",
+        "starbucks meal calories"
+      ],
+      "isPartOf": "https://www.fastfoodinsight.com/"
+    },
+    {
+      "@type": "Dataset",
+      "name": "Wendy's Nutrition Dataset",
+      "description": "Detailed nutrition information (calories, total fat, protein, sodium, carbohydrates, saturated fat, trans fat, sugars, cholesterol) for Wendy's menu items worldwide.",
+      "creator": { "@type": "Organization", "name": "FastFoodInsight" },
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "keywords": [
+        "wendys nutrition facts",
+        "wendys calories",
+        "wendys frosty nutrition",
+        "wendys burger nutrition",
+        "wendys low calorie items",
+        "wendys high protein options",
+        "wendys menu calories",
+        "wendys protein content",
+        "wendys macro calculator",
+        "wendys sandwich nutrition",
+        "wendys dietary options",
+        "wendys dessert calories",
+        "wendys beverages",
+        "wendys combo meals",
+        "wendys side nutrition",
+        "wendys breakfast calories",
+        "wendys kids menu",
+        "wendys gluten free options",
+        "wendys meal calories",
+        "wendys menu analysis",
+        "wendys global nutrition",
+        "wendys daily intake",
+        "wendys healthy options",
+        "wendys calorie comparison",
+        "wendys macro breakdown",
+        "wendys high fiber items",
+        "wendys low sodium meals"
+      ],
+      "isPartOf": "https://www.fastfoodinsight.com/"
+    },
+    {
+      "@type": "Dataset",
+      "name": "Domino's Nutrition Dataset",
+      "description": "Detailed nutrition information (calories, total fat, protein, sodium, carbohydrates, saturated fat, trans fat, sugars, cholesterol) for Domino's menu items worldwide.",
+      "creator": { "@type": "Organization", "name": "FastFoodInsight" },
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "keywords": [
+        "dominos nutrition facts",
+        "dominos calories",
+        "pizza slice nutrition",
+        "dominos pakistan nutrition",
+        "dominos menu calories",
+        "dominos protein content",
+        "dominos vegan options",
+        "dominos low calorie items",
+        "dominos nutrition chart",
+        "dominos macro calculator",
+        "dominos calorie comparison",
+        "dominos dessert calories",
+        "dominos beverages",
+        "dominos combo meals",
+        "dominos side nutrition",
+        "dominos breakfast calories",
+        "dominos kids menu",
+        "dominos gluten free options",
+        "dominos meal calories",
+        "dominos menu analysis",
+        "dominos daily intake",
+        "dominos global nutrition",
+        "dominos low sugar items",
+        "dominos high protein pizza",
+        "dominos calorie breakdown",
+        "dominos healthy pizza",
+        "dominos fast food macros"
+      ],
+      "isPartOf": "https://www.fastfoodinsight.com/"
+    },
+    {
+      "@type": "Dataset",
+      "name": "Taco Bell Nutrition Dataset",
+      "description": "Detailed nutrition information (calories, total fat, protein, sodium, carbohydrates, saturated fat, trans fat, sugars, cholesterol) for Taco Bell menu items worldwide.",
+      "creator": { "@type": "Organization", "name": "FastFoodInsight" },
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "keywords": [
+       "taco bells nutrition facts",
+        "taco bell calories",
+        "taco nutrition",
+        "burrito nutrition",
+        "taco bell menu calories",
+        "taco bell protein content",
+        "taco bell low calorie items",
+        "taco bell vegan options",
+        "taco bell macro calculator",
+        "taco bell dietary chart",
+        "taco bell calorie comparison",
+        "taco bell breakfast items",
+        "taco bell desserts",
+        "taco bell beverages",
+        "taco bell combo meals",
+        "taco bell side nutrition",
+        "taco bell kids menu",
+        "taco bell gluten free options",
+        "taco bell meal calories",
+        "taco bell menu analysis",
+        "taco bell daily intake",
+        "taco bell global nutrition",
+        "taco bell high protein items",
+        "taco bell low sodium items",
+        "taco bell low sugar meals",
+        "taco bell macro breakdown",
+        "taco bell healthy options"
+      ],
+      "isPartOf": "https://www.fastfoodinsight.com/"
     }
-   }
-  }
-  return null; // no match found
- }
+  ]
+}
+</script>
+</head>
 
- items.forEach((item, index) => {
-  if (!item.id) return;
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YXSSM718Z2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  // ✅ USE THE ORIGINAL CSS GRADIENT CLASSES (food-category-1 to food-category-5)
-  const categoryClass = `food-category-${(index % 5) + 1}`;
-  
-  // Detect food category or assign random icon if unique
-  const category = detectFoodCategory(item.name);
-  let icon;
+  gtag('config', 'G-YXSSM718Z2');
+</script>
+<body class="gradient-bg min-h-screen text-gray-800">
 
-  if (category) {
-   icon = foodCategories[category].icon;
-  } else {
-   // Random icon for unknown/unique items
-   icon = randomIcons[Math.floor(Math.random() * randomIcons.length)];
-  }
-
-  const card = document.createElement("div");
-  // ✅ USING ORIGINAL CSS GRADIENT CLASSES - NO WHITE BACKGROUND
-  card.className = `food-card ${categoryClass} rounded-xl p-4 h-full flex flex-col transition-all duration-300 hover:shadow-lg`;
-
-  card.innerHTML = `
-   <div class="food-content flex-1 flex flex-col">
-    <div class="food-icon">
-     ${icon}
+  <!-- Header -->
+  <header class="sticky top-0 bg-white/90 backdrop-blur-md shadow-sm py-3 px-4 flex justify-between items-center z-20 border-b border-gray-100">
+    <div class="flex items-center space-x-3">
+      <div class="logo-glow">
+        <div class="logo-gradient w-10 h-10 rounded-full flex items-center justify-center">
+          <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/>
+            <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M15 9L9 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M15 15L9 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <h1 class="text-xl font-black premium-text tracking-tight">FASTFOODINSIGHT</h1>
     </div>
-    <h3 class="text-lg font-bold text-gray-800 mb-2">${item.name}</h3>
-    <p class="text-gray-700 text-sm mb-3 flex-1">${item.serving_size || 'Standard serving'}</p>
-    <div class="flex items-center justify-between mt-auto">
-     <span class="text-xs font-medium text-gray-700">View nutrition details</span>
-     <i class="fas fa-chevron-right text-gray-700 text-sm"></i>
+    <nav class="hidden md:flex space-x-4">
+    <a href="#service" class="text-gray-600 hover:text-blue-600 font-medium transition">Service</a>
+    <a href="#brands" class="text-gray-600 hover:text-blue-600 font-medium transition">Brands</a>
+    <a href="/FastFoodInsight-AI.html" class="relative text-gray-600 hover:text-blue-600 font-medium transition group flex items-center gap-1">
+        <span>Chat</span>
+        <span class="ai-badge">AI</span>
+        <span class="tooltip-text">FastFoodInsight AI Nutrition Assistant</span>
+    </a>
+    <a href="#features" class="text-gray-600 hover:text-blue-600 font-medium transition">Features</a>
+    <a href="#about" class="text-gray-600 hover:text-blue-600 font-medium transition">About</a>
+</nav>
+    <button id="mobileMenuBtn" class="md:hidden text-gray-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </header>
+
+  <!-- Mobile Navigation with Logo -->
+  <div id="mobileNav" class="mobile-nav fixed inset-0 bg-white z-30 p-6 md:hidden">
+    <div class="flex justify-between items-center mb-6">
+      <div class="flex items-center space-x-3">
+        <div class="logo-glow">
+          <div class="logo-gradient w-10 h-10 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M15 9L9 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M15 15L9 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <h1 class="text-lg font-black premium-text tracking-tight">FASTFOODINSIGHT</h1>
+      </div>
+      <button id="closeMobileMenu" class="text-gray-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
     </div>
-   </div>
-  `;
+   <nav class="flex flex-col space-y-4">
+    <a href="#service" class="text-gray-600 hover:text-blue-600 font-medium text-base transition py-2 border-b border-gray-100">Service</a>
+    <a href="#brands" class="text-gray-600 hover:text-blue-600 font-medium text-base transition py-2 border-b border-gray-100">Brands</a>
+    <a href="/FastFoodInsight-AI.html" class="relative text-gray-600 hover:text-blue-600 font-medium text-base transition py-2 border-b border-gray-100 flex items-center gap-2">
+        <span>Chat</span>
+        <span class="ai-badge-mobile">AI</span>
+    </a>
+    <a href="#features" class="text-gray-600 hover:text-blue-600 font-medium text-base transition py-2 border-b border-gray-100">Features</a>
+    <a href="#about" class="text-gray-600 hover:text-blue-600 font-medium text-base transition py-2 border-b border-gray-100">About</a>
+</nav>
+  </div>
 
-  card.addEventListener("click", () => {
-   const countryName = encodeURIComponent(selectedCountry.textContent.toLowerCase().replace(/\s+/g, '-'));
-   const branchName = encodeURIComponent(selectedBranch.textContent.toLowerCase().replace(/\s+/g, '-'));
-   window.location.href = `/item.html?country=${countryName}&branch=${branchName}&id=${encodeURIComponent(item.id)}`;
-  });
+  <main class="max-w-7xl mx-auto px-4 py-4 space-y-8 md:space-y-12">
 
-  resultsDiv.appendChild(card);
- });
-}
-// Event Listeners
-randomBtn.addEventListener("click", () => {
- if (foodItems.length > 0) {
-  const randomItem = foodItems[Math.floor(Math.random() * foodItems.length)];
-  // Since 'item.html' is a local file, it's correct to use a relative path here.
-  window.location.href = `/item.html?id=${encodeURIComponent(randomItem.id)}`; 
- } else {
-  // NOTE: Changed alert() to console.log as alerts are discouraged in the environment.
-  console.log("Please select a country and branch first.");
- }
-});
+    <!-- Service Section - Enhanced with Better UI -->
+    <section id="service" class="service-section section-padding">
+      <div class="text-center mb-8">
+        <h1 class="text-2xl md:text-4xl font-bold text-gray-900 mb-4">Nutrition Insights Behind Every Bite</h1>
+        <p class="text-gray-600 max-w-2xl mx-auto">Instantly access nutritional information for thousands of fast food items across different countries and restaurants.</p>
+      </div>
 
-clearFilters.addEventListener("click", () => {
- searchInput.value = "";
- if (foodItems.length > 0) {
-  displayResults(foodItems);
- }
-});
+      <!-- Enhanced Selection Process -->
+      <div class="space-y-8">
+        <!-- Step 1: Country Selection -->
+        <div class="selection-card p-6 md:p-8">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="step-indicator">1</div>
+            <div>
+              <h3 class="text-lg md:text-xl font-bold text-gray-900">Select Your Country</h3>
+              <p class="text-gray-600 text-sm">Choose your location to see relevant fast food chains</p>
+            </div>
+          </div>
+          
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-globe-americas text-gray-400"></i>
+            </div>
+            <select id="countrySelect" 
+                    class="w-full pl-10 pr-4 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-base transition bg-white appearance-none">
+              <option value="">Loading countries...</option>
+            </select>
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <i class="fas fa-chevron-down text-gray-400"></i>
+            </div>
+          </div>
+        </div>
 
-countrySelect.addEventListener("change", () => {
- currentCountryId = countrySelect.value;
- const countryName = countrySelect.options[countrySelect.selectedIndex].text;
- 
- if (currentCountryId) {
-  branchSection.classList.remove("hidden");
-  selectedCountry.textContent = countryName;
-  fetchBranches(currentCountryId);
-  
-  // Scroll to branches on mobile
-  if (window.innerWidth < 768) {
-   branchSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
- } else {
-  branchSection.classList.add("hidden");
-  searchSection.classList.add("hidden");
-  // Clear results when country is deselected
-  resultsDiv.innerHTML = '';
- }
-});
+        <!-- Step 2: Branch Selection -->
+        <div id="branchSection" class="selection-card p-6 md:p-8 hidden">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="step-indicator">2</div>
+            <div>
+              <h3 class="text-lg md:text-xl font-bold text-gray-900">Select Fast Food Branch</h3>
+              <p class="text-gray-600 text-sm">Choose your favorite restaurant chain</p>
+            </div>
+          </div>
+          
+          <div class="branch-container" id="branchContainer">
+            <!-- Branches will be populated dynamically from API -->
+          </div>
+        </div>
 
-searchInput.addEventListener("input", () => {
- const searchTerm = searchInput.value.toLowerCase();
- const filtered = foodItems.filter(item =>
-  item.name.toLowerCase().includes(searchTerm)
- );
- displayResults(filtered);
-});
+        <!-- Step 3: Food Items -->
+        <div id="searchSection" class="selection-card p-6 md:p-8 hidden">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="step-indicator">3</div>
+            <div>
+              <h3 class="text-lg md:text-xl font-bold text-gray-900">Explore Menu Items</h3>
+              <p class="text-gray-600 text-sm">Browse nutritional information for <span id="selectedBranch" class="font-semibold text-blue-600"></span> in <span id="selectedCountry" class="font-semibold text-blue-600"></span></p>
+            </div>
+          </div>
 
-// Mobile menu functionality (Unchanged)
-mobileMenuBtn.addEventListener("click", () => {
- mobileNav.classList.add("open");
- document.body.style.overflow = 'hidden';
-});
+          <!-- Search Input -->
+          <div class="relative mb-8">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-search text-gray-400"></i>
+            </div>
+            <input type="text" id="searchInput" placeholder="Search food items..." 
+                   class="w-full pl-10 pr-4 py-4 rounded-xl border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-blue-400 transition bg-white" />
+          </div>
 
-closeMobileMenu.addEventListener("click", () => {
- mobileNav.classList.remove("open");
- document.body.style.overflow = 'auto';
-});
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap gap-3 mb-6">
+            <button id="randomBtn" class="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 shadow-md">
+              <i class="fas fa-random text-xs"></i>
+              Random Item
+            </button>
+            <button id="clearFilters" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2">
+              <i class="fas fa-times text-xs"></i>
+              Clear Filters
+            </button>
+          </div>
 
-document.querySelectorAll('#mobileNav a').forEach(link => {
- link.addEventListener('click', () => {
-  mobileNav.classList.remove("open");
-  document.body.style.overflow = 'auto';
- });
-});
+          <!-- Results -->
+          <div id="results" class="card-grid">
+            <!-- dynamically generated cards here -->
+          </div>
+        </div>
+      </div>
 
-// Back to top functionality (Unchanged)
-window.addEventListener("scroll", () => {
- if (window.pageYOffset > 300) {
-  backToTop.classList.add("visible");
- } else {
-  backToTop.classList.remove("visible");
- }
-});
+      <!-- Brand Showcase Section -->
+        <section id="brands" class="brand-showcase">
+          <h2 class="section-title">Explore Popular Fast Food Brands</h2>
+          <p class="section-subtitle">Get detailed nutritional insights from your favorite fast food restaurants</p>
+          
+          <div class="brand-grid">
+            <!-- McDonald's -->
+            <div class="brand-card" data-brand="mcdonalds">
+              <img src="mcdonalds1.png" alt="McDonald's" class="brand-logo-showcase">
+              <div class="brand-name">McDonald's</div>
+              <div class="brand-description">World's largest fast food chain with burgers, fries, and more</div>
+            </div>
+            
+            <!-- Pizza Hut -->
+            <div class="brand-card" data-brand="pizzahut">
+              <img src="pizzahut1.png" alt="Pizza Hut" class="brand-logo-showcase">
+              <div class="brand-name">Pizza Hut</div>
+              <div class="brand-description">Famous for pizzas, pasta, and sides worldwide</div>
+            </div>
+            
+            <!-- KFC -->
+            <div class="brand-card" data-brand="kfc">
+              <img src="kfc1.png" alt="KFC" class="brand-logo-showcase">
+              <div class="brand-name">KFC</div>
+              <div class="brand-description">World's most popular chicken restaurant chain</div>
+            </div>
+            
+            <!-- Starbucks -->
+            <div class="brand-card" data-brand="starbucks">
+              <img src="starbucks1.png" alt="Starbucks" class="brand-logo-showcase">
+              <div class="brand-name">Starbucks</div>
+              <div class="brand-description">Leading coffeehouse chain with beverages and snacks</div>
+            </div>
+            
+            <!-- Wendy's -->
+            <div class="brand-card" data-brand="wendys">
+              <img src="wendys1.png" alt="Wendy's" class="brand-logo-showcase">
+              <div class="brand-name">Wendy's</div>
+              <div class="brand-description">Known for square hamburgers and fresh ingredients</div>
+            </div>
+            
+            <!-- Domino's -->
+            <div class="brand-card" data-brand="dominos">
+              <img src="domino1.png" alt="Domino's" class="brand-logo-showcase">
+              <div class="brand-name">Domino's</div>
+              <div class="brand-description">Global pizza delivery and carryout chain</div>
+            </div>
+            
+            <!-- Dunkin' -->
+            <div class="brand-card" data-brand="dunkin">
+              <img src="dunkin1.png" alt="Dunkin'" class="brand-logo-showcase">
+              <div class="brand-name">Dunkin'</div>
+              <div class="brand-description">Coffee and baked goods chain with global presence</div>
+            </div>
+            
+            <!-- Taco Bell -->
+            <div class="brand-card" data-brand="tacobell">
+              <img src="tacobell1.png" alt="Taco Bell" class="brand-logo-showcase">
+              <div class="brand-name">Taco Bell</div>
+              <div class="brand-description">Mexican-inspired fast food with tacos and burritos</div>
+            </div>
+            
+            <!-- Burger King -->
+            <div class="brand-card" data-brand="burgerking">
+              <img src="burgerking1.png" alt="Burger King" class="brand-logo-showcase">
+              <div class="brand-name">Burger King</div>
+              <div class="brand-description">Home of the Whopper and flame-grilled burgers</div>
+            </div>
+          </div>
+        </section>
+    </section>
 
-backToTop.addEventListener("click", () => {
- window.scrollTo({ top: 0, behavior: "smooth" });
-});
+    <!-- Features Section -->
+    <section id="features" class="bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div class="section-padding">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4 text-center">Why Use FastFoodInsight?</h2>
+        <p class="text-gray-600 text-center max-w-3xl mx-auto mb-8">We provide the most comprehensive fast food nutrition database to help you make informed dietary decisions.</p>
+        
+        <div class="card-grid">
+          <div class="p-4 rounded-xl bg-blue-50 border border-blue-100">
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-3">
+              <i class="fas fa-utensils text-blue-600"></i>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Comprehensive Database</h3>
+            <p class="text-gray-600 text-sm">Access nutritional information for thousands of menu items from popular fast food chains worldwide.</p>
+          </div>
+          
+          <div class="p-4 rounded-xl bg-green-50 border border-green-100">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-3">
+              <i class="fas fa-globe text-green-600"></i>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Country-Specific Menus</h3>
+            <p class="text-gray-600 text-sm">Discover how menu items and nutritional values vary across different countries and regions.</p>
+          </div>
+          
+          <div class="p-4 rounded-xl bg-purple-50 border border-purple-100">
+            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-3">
+              <i class="fas fa-search text-purple-600"></i>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Advanced Search</h3>
+            <p class="text-gray-600 text-sm">Find exactly what you're looking for with our powerful search and filtering options.</p>
+          </div>
+          
+          <div class="p-4 rounded-xl bg-yellow-50 border border-yellow-100">
+            <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-3">
+              <i class="fas fa-mobile-alt text-yellow-600"></i>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Mobile-Friendly</h3>
+            <p class="text-gray-600 text-sm">Access our database on any device with our responsive, mobile-optimized design.</p>
+          </div>
+          
+          <div class="p-4 rounded-xl bg-red-50 border border-red-100">
+            <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-3">
+              <i class="fas fa-heart text-red-600"></i>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Health Tracking</h3>
+            <p class="text-gray-600 text-sm">Monitor your dietary intake and make healthier choices with our nutrition tracking features.</p>
+          </div>
+          
+          <div class="p-4 rounded-xl bg-indigo-50 border border-indigo-100">
+            <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-3">
+              <i class="fas fa-sync text-indigo-600"></i>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Regular Updates</h3>
+            <p class="text-gray-600 text-sm">Our database is constantly updated with new menu items and nutritional information.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-// Smooth scrolling for anchor links (Unchanged)
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
- anchor.addEventListener('click', function (e) {
-  e.preventDefault();
-  const target = document.querySelector(this.getAttribute('href'));
-  if (target) {
-   target.scrollIntoView({
-    behavior: 'smooth',
-    block: 'start'
-   });
-  }
- });
-});
+    <!-- About Section -->
+    <section id="about" class="bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div class="section-padding">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center">About FastFoodInsight</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Our Mission</h3>
+            <p class="text-gray-600 mb-4">At FastFoodInsight, we believe that everyone deserves to make informed decisions about their food choices. Our mission is to provide accurate, comprehensive nutritional information for fast food items worldwide.</p>
+            
+            <h3 class="text-xl font-semibold mb-3">What We Offer</h3>
+            <ul class="text-gray-600 space-y-2 mb-4">
+              <li class="flex items-start">
+                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Detailed nutritional information for thousands of menu items</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Country-specific menus and nutritional values</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Regular updates as menus change</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="bg-blue-50 rounded-xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Nutrition Information We Provide</h3>
+            <div class="flex flex-wrap">
+              <span class="nutrition-badge"><i class="fas fa-fire"></i> Calories</span>
+              <span class="nutrition-badge"><i class="fas fa-weight"></i> Fat</span>
+              <span class="nutrition-badge"><i class="fas fa-oil-can"></i> Saturated Fat</span>
+              <span class="nutrition-badge"><i class="fas fa-exchange-alt"></i> Trans Fat</span>
+              <span class="nutrition-badge"><i class="fas fa-heartbeat"></i> Cholesterol</span>
+              <span class="nutrition-badge"><i class="fas fa-cube"></i> Sodium</span>
+              <span class="nutrition-badge"><i class="fas fa-bread-slice"></i> Carbohydrates</span>
+              <span class="nutrition-badge"><i class="fas fa-candy-cane"></i> Sugar</span>
+              <span class="nutrition-badge"><i class="fas fa-dumbbell"></i> Protein</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-// Initialize countries on page load
-fetchCountries();
+<footer class="bg-gray-900 text-white py-8 mt-8">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="md:col-span-2">
+          <div class="flex items-center space-x-2 mb-3">
+            <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+            <h2 class="text-lg font-bold">FastFoodInsight</h2>
+          </div>
+          <p class="text-gray-400 text-sm mb-4 max-w-md">Empowering individuals to make informed dietary decisions through comprehensive fast food nutrition information.</p>
+        </div>
+        
+        <div>
+          <h3 class="text-base font-semibold mb-2">Quick Links</h3>
+          <ul class="space-y-1">
+            <li><a href="#service" class="text-gray-400 hover:text-white transition text-sm">Service</a></li>
+            <li><a href="#brands" class="text-gray-400 hover:text-white transition text-sm">Brands</a></li>
+            <li><a href="#features" class="text-gray-400 hover:text-white transition text-sm">Features</a></li>
+            <li><a href="#about" class="text-gray-400 hover:text-white transition text-sm">About</a></li>
+            <li><a href="/privacy-policy.html" class="text-gray-400 hover:text-white transition text-sm">Privacy Policy</a></li>
+            <li><a href="/terms-of-service.html" class="text-gray-400 hover:text-white transition text-sm">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="mt-6 pt-6 border-t border-gray-800 text-center text-gray-400 text-xs">
+        <p>© 2025 FastFoodInsight. All rights reserved. Made with <i class="fas fa-heart text-red-500"></i> for health-conscious food lovers.</p>
+        <p class="mt-1 max-w-2xl mx-auto">All brand names and trademarks are the property of their respective owners. This website is not affiliated with any fast food chains.</p>
+       
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <div id="backToTop" class="back-to-top">
+    <i class="fas fa-chevron-up"></i>
+  </div>
+
+  <script src="hello.js"></script>
+</body>
+</html>
