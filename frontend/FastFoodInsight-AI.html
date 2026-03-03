@@ -42,8 +42,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="chat.css">
-    
+    <link rel="stylesheet" href="chat.css"> 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
@@ -163,13 +162,15 @@
         gtag('config', 'G-YXSSM718Z2');
     </script>
 
+
     <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-    <div class="mobile-header">
+            <div class="mobile-header">
         <h1><i class="fas fa-hamburger"></i> <a href="index.html">FastFoodInsight</a></h1>
+        <div id="mobileSubscriptionBadge" class="mobile-subscription-badge">Free Trial</div>
         <button class="mobile-menu-btn" onclick="toggleSidebar()">
             <i class="fas fa-bars"></i>
         </button>
@@ -194,7 +195,9 @@
                 </div>
                 <div class="user-name" id="userName">Guest User</div>
             </div>
-            
+           
+            <!-- Put this inside the sidebar subscription-status-card or in account page -->
+
             <div class="new-chat-section" id="newChatSection" style="display: none;">
                 <button class="new-chat-btn" onclick="createNewChat()">
                     <i class="fas fa-plus"></i> New Chat
@@ -274,6 +277,18 @@
                     </button>
                 </div>
             </div>
+            <div class="sidebar-billing-btn">
+    <a href="billing.html" class="nav-link">
+        <i class="fas fa-credit-card"></i>
+        <span>Billing & Account</span>
+    </a>
+</div>
+<div class="">
+    <a href="" class="">
+        <i class=""></i>
+        <span></span>
+    </a>
+</div>
         </div>
         
         <!-- Main Content -->
@@ -306,7 +321,7 @@
 
             <div class="messages-container" id="messages" tabindex="-1" aria-live="polite"></div>
 
-            <div class="input-container">
+                                    <div class="input-container">
                 <div class="input-wrapper">
                     <div class="input-area">
                         <textarea 
@@ -324,6 +339,20 @@
                     <button class="send-button" id="sendButton" onclick="handleSendMessage()">
                         <i class="fas fa-paper-plane"></i>
                     </button>
+                </div>
+                
+                <!-- MESSAGE COUNTER FOR ANONYMOUS USERS -->
+                <div id="messageCounterContainer" class="message-counter-container" style="display: none;">
+                    <div class="message-counter">
+                        <span id="messagesRemaining" class="messages-remaining">10</span>
+                        <span class="messages-total">/ 10 free messages</span>
+                    </div>
+                    <p class="counter-note">Sign in to get unlimited messages + 1 month free!</p>
+                </div>
+
+                <!-- DISCLAIMER: NOT MEDICAL ADVICE -->
+                <div class="disclaimer-note">
+                    <span>AI-generated nutritional information – for reference only.</span>
                 </div>
             </div>
         </div>
@@ -474,7 +503,10 @@
             </div>
         </div>
     </div>
+     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+   
     <script src="chat.js"></script>
+   
 </body>
 </html>
