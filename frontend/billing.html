@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastFoodInsight AI – Billing & Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="chat.css">
+    <link rel="stylesheet" href="billing.css">
+    <link rel="stylesheet" href="subscription.css"> 
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="48x48">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <style>
+        /* Force vertical scrollbar on the billing content area */
+        .main-content {
+            overflow-y: auto !important;
+            height: 100vh; /* ensure it takes full height */
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-light, #FF6B35) var(--bg-secondary, #F8FAFC);
+        }
+        .main-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .main-content::-webkit-scrollbar-track {
+            background: var(--bg-secondary, #F8FAFC);
+            border-radius: 4px;
+        }
+        .main-content::-webkit-scrollbar-thumb {
+            background: var(--accent-light, #FF6B35);
+            border-radius: 4px;
+        }
+        .main-content::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-hover-light, #ff8b5c);
+        }
+        /* Remove the header user actions (sign in button, status) */
+        .chat-header .user-actions {
+            display: none !important;
+        }
+        /* Adjust header spacing if needed */
+        .chat-header {
+            justify-content: flex-start;
+        }
+        .chat-header h2 {
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-header">
+        <h1><i class="fas fa-hamburger"></i> <a href="index.html">FastFoodInsight</a></h1>
+        <div id="mobileSubscriptionBadge" class="mobile-subscription-badge" style="display: none;"></div>
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar (simplified) -->
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-hamburger"></i> <span>FastFoodInsight AI</span></h1>
+                <div class="tagline">World's Largest Fast Food Nutrition Database</div>
+                <button class="sidebar-close" onclick="toggleSidebar()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="user-info" id="userInfo">
+                <div class="user-avatar" id="userAvatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-name" id="userName">Guest User</div>
+            </div>
+
+            <!-- Navigation Links – Beautifully styled -->
+            <div class="sidebar-nav">
+                <a href="FastFoodInsight-AI.html" class="nav-link">
+                    <i class="fas fa-comment"></i>
+                    <span>Chat</span>
+                </a>
+                <a href="billing.html" class="nav-link active">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Billing</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="chat-header">
+                <h2><i class="fas fa-credit-card"></i> Account & Billing</h2>
+                <!-- user-actions div removed entirely -->
+            </div>
+
+            <div class="billing-container">
+                <!-- Account Details Card -->
+                <div class="billing-card account-card">
+                    <div class="card-header">
+                        <i class="fas fa-user-circle"></i>
+                        <h3>Account Details</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="detail-row">
+                            <span class="detail-label">Email</span>
+                            <span class="detail-value" id="accountEmail">noumanmasood.ram2@gmail.com</span>
+                        </div>
+                        <div class="detail-row name-row">
+                            <span class="detail-label">Name</span>
+                            <span class="detail-value" id="accountName">Nouman Masood</span>
+                            <button class="edit-btn" onclick="editName()">
+                                <i class="fas fa-pen"></i> Edit
+                            </button>
+                        </div>
+                        <div id="nameEditContainer" class="edit-container" style="display: none;">
+                            <input type="text" id="editNameInput" class="edit-input" placeholder="Enter your name">
+                            <div class="edit-actions">
+                                <button class="save-btn" onclick="saveName()">Save</button>
+                                <button class="cancel-edit-btn" onclick="cancelNameEdit()">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Your Plan Card -->
+                <div class="billing-card plan-card">
+                    <div class="card-header">
+                        <i class="fas fa-crown"></i>
+                        <h3>Your Plan</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="plan-grid">
+                            <div class="plan-item">
+                                <span class="plan-label">Status</span>
+                                <span class="plan-value" id="planStatus">Free Trial</span>
+                            </div>
+                            <div class="plan-item">
+                                <span class="plan-label">Plan</span>
+                                <span class="plan-value" id="planName">Basic</span>
+                            </div>
+                            <div class="plan-item">
+                                <span class="plan-label">Expires</span>
+                                <span class="plan-value" id="planExpiry">April 2, 2026</span>
+                            </div>
+                            <div class="plan-item">
+                                <span class="plan-label">Days Left</span>
+                                <span class="plan-value highlight" id="daysLeft">30 days</span>
+                            </div>
+                        </div>
+                        <div id="cancelSection" class="cancel-section" style="display: none;">
+                            <button class="cancel-btn" onclick="cancelSubscription()">
+                                <i class="fas fa-ban"></i> Cancel Subscription
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Available Plans / Pricing Cards -->
+                <!-- Available Plans / Pricing Cards -->
+<div class="billing-card pricing-card" id="pricingSection">
+    <div class="card-header">
+        <i class="fas fa-tags"></i>
+        <h3>Available Plans</h3>
+    </div>
+    <div class="pricing-container">
+        <!-- Basic Plan -->
+        <div class="plan-card price-card basic">
+            <div class="card-badge popular">Most Popular</div>
+            <h4>Basic</h4>
+            <div class="price">
+                <span class="currency">$</span>
+                <span class="amount">10</span>
+                <span class="period">/month</span>
+            </div>
+            <ul class="features">
+                <li><i class="fas fa-check-circle"></i> 30 days access</li>
+                <li><i class="fas fa-check-circle"></i> Unlimited chat messages</li>
+                <li><i class="fas fa-check-circle"></i> Full database access</li>
+                <li><i class="fas fa-check-circle"></i> Email support</li>
+            </ul>
+            <button class="subscribe-btn basic" onclick="handlePlanClick('basic')">
+                Subscribe
+            </button>
+        </div>
+        <!-- Premium Plan -->
+        <div class="plan-card price-card premium">
+            <div class="card-badge best">Best Value</div>
+            <h4>Premium</h4>
+            <div class="price">
+                <span class="currency">$</span>
+                <span class="amount">100</span>
+                <span class="period">/year</span>
+            </div>
+            <ul class="features">
+                <li><i class="fas fa-check-circle"></i> 365 days access</li>
+                <li><i class="fas fa-check-circle"></i> Unlimited everything</li>
+                <li><i class="fas fa-check-circle"></i> Priority support</li>
+                <li><i class="fas fa-check-circle"></i> Save 20% vs monthly</li>
+            </ul>
+            <button class="subscribe-btn premium" onclick="handlePlanClick('premium')">
+                Subscribe
+            </button>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login & Verification Modals – hidden by default -->
+    <div class="modal-overlay" id="verificationModal" style="display: none;">
+        <!-- ... your verification modal HTML ... -->
+    </div>
+    <div class="modal-overlay" id="loginModal" style="display: none;">
+        <!-- ... your login modal HTML ... -->
+    </div>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="subscription.js"></script>
+    <script src="billing.js"></script>
+</body>
+</html>
