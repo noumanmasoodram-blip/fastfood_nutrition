@@ -1,0 +1,572 @@
+/* ===================== SUBSCRIPTION STATUS CARD IN SIDEBAR ===================== */
+.subscription-status-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 15px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.subscription-status-icon {
+    font-size: 2rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.subscription-status-content {
+    text-align: center;
+    flex-grow: 1;
+}
+
+.subscription-status-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.subscription-status-info {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.subscription-upgrade-btn {
+    width: 100%;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid white;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.subscription-upgrade-btn:hover {
+    background: white;
+    color: #667eea;
+    transform: translateY(-2px);
+}
+
+/* ===================== MOBILE SUBSCRIPTION BADGE ===================== */
+.mobile-subscription-badge {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* ===================== MESSAGE COUNTER ===================== */
+.message-counter-container {
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 12px;
+    text-align: center;
+}
+
+.message-counter {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 8px;
+}
+
+.messages-remaining {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ff6b6b;
+}
+
+.messages-total {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.counter-note {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* ===================== SUBSCRIPTION MODAL OVERLAY ===================== */
+.subscription-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    overflow-y: auto;
+}
+
+.subscription-modal {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 1000px;
+    width: 95%;
+    max-height: 95vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.3s ease;
+}
+
+.modal-close-btn:hover {
+    color: #333;
+}
+
+/* ===================== MODAL HEADER ===================== */
+.modal-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.modal-header h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin: 0 0 10px 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.modal-subtitle {
+    font-size: 1.1rem;
+    color: #666;
+    margin: 0;
+}
+
+/* ===================== PRICING CONTAINER ===================== */
+.pricing-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 50px;
+}
+
+/* ===================== PRICING CARDS ===================== */
+.pricing-card {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 16px;
+    padding: 30px;
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.pricing-card:hover {
+    border-color: #667eea;
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.15);
+    transform: translateY(-10px);
+}
+
+.basic-plan-card {
+    border: 2px solid #667eea;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+}
+
+.premium-plan-card {
+    border: 2px solid #764ba2;
+    background: linear-gradient(135deg, rgba(118, 75, 162, 0.1) 0%, rgba(102, 126, 234, 0.05) 100%);
+}
+
+/* ===================== CARD BADGES ===================== */
+.card-badge {
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.badge-new {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.badge-popular {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.badge-best {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+/* ===================== CARD CONTENT ===================== */
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 15px 0 20px 0;
+    text-align: center;
+}
+
+.card-price {
+    text-align: center;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 5px;
+}
+
+.price-currency {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #667eea;
+}
+
+.price-amount {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #667eea;
+}
+
+.price-period {
+    font-size: 1rem;
+    color: #999;
+}
+
+.card-description {
+    text-align: center;
+    color: #666;
+    font-size: 0.95rem;
+    margin: 0 0 20px 0;
+}
+
+/* ===================== FEATURES LIST ===================== */
+.card-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 25px 0;
+    flex-grow: 1;
+}
+
+.card-features li {
+    padding: 12px 0;
+    color: #555;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.card-features li:last-child {
+    border-bottom: none;
+}
+
+.card-features i {
+    color: #4caf50;
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+}
+
+.card-features li:has(i.fa-times) i {
+    color: #ccc;
+}
+
+.card-note {
+    text-align: center;
+    color: #999;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* ===================== CARD BUTTONS ===================== */
+.card-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.btn-premium {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.btn-premium:hover {
+    box-shadow: 0 10px 25px rgba(118, 75, 162, 0.4);
+}
+
+/* ===================== COMPARISON TABLE ===================== */
+.pricing-comparison {
+    background: #f9f9f9;
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 40px;
+}
+
+.pricing-comparison h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 25px 0;
+    text-align: center;
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.comparison-table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.comparison-table th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.comparison-table td {
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.comparison-table tbody tr:hover {
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.comparison-table i {
+    color: #667eea;
+    margin-right: 5px;
+}
+
+/* ===================== FAQ SECTION ===================== */
+.pricing-faq {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.pricing-faq h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 25px 0;
+    text-align: center;
+}
+
+.faq-items {
+    display: grid;
+    gap: 15px;
+}
+
+.faq-item {
+    background: white;
+    border-left: 4px solid #667eea;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.faq-question {
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 10px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.3s ease;
+}
+
+.faq-question:hover {
+    color: #667eea;
+}
+
+.faq-question i {
+    transition: transform 0.3s ease;
+    color: #667eea;
+}
+
+.faq-answer {
+    color: #666;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* ===================== MODAL FOOTER ===================== */
+.modal-footer {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.footer-text {
+    color: #999;
+    font-size: 0.9rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.footer-text i {
+    color: #4caf50;
+}
+
+/* ===================== RESPONSIVE DESIGN ===================== */
+@media (max-width: 768px) {
+    .subscription-modal {
+        padding: 25px;
+        border-radius: 16px;
+    }
+
+    .modal-header h2 {
+        font-size: 1.6rem;
+    }
+
+    .pricing-container {
+        grid-template-columns: 1fr;
+    }
+
+    .pricing-card {
+        padding: 20px;
+    }
+
+    .card-title {
+        font-size: 1.3rem;
+    }
+
+    .price-amount {
+        font-size: 2rem;
+    }
+
+    .comparison-table {
+        font-size: 0.85rem;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+        padding: 10px;
+    }
+
+    .pricing-faq {
+        padding: 20px;
+    }
+
+    .subscription-status-card {
+        margin: 15px 10px;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .subscription-modal {
+        padding: 20px;
+        width: 98%;
+    }
+
+    .modal-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .modal-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .pricing-card {
+        padding: 15px;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    .price-amount {
+        font-size: 1.5rem;
+    }
+
+    .card-features li {
+        padding: 10px 0;
+        font-size: 0.85rem;
+    }
+
+    .comparison-table {
+        font-size: 0.75rem;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+        padding: 8px;
+    }
+
+    .faq-item {
+        padding: 15px;
+    }
+
+    .subscription-status-card {
+        padding: 15px;
+        margin: 15px 10px;
+    }
+
+    .message-counter-container {
+        padding: 10px;
+    }
+}
